@@ -1,0 +1,8 @@
+{
+  "server": { "baseDir": "./" },
+  "files": ["*.html", "css/*.css", "js/app.js"],
+  "port": 3200,
+  "open": true,
+  "notify": false,
+  "reloadDelay": 300
+}

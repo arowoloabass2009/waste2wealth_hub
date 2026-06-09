@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Account Verification · Step 1 — Waste2Wealth Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/kyc.css"/>
+</head>
+<body class="kyc-root">
+
+<!-- ══ Navbar ══════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">♻️</div>
+      <span class="navbar-name">Waste2Wealth <span>Hub</span><small>Verification · Step 1</small></span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="kyc2.html" class="btn btn-outline btn-sm">Step 2 →</a>
+      <button class="btn btn-dark btn-sm" onclick="SupabaseAuth.signOut()">Sign Out</button>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ══ Page Header ═════════════════════════════════════════ -->
+<div class="page-header">
+  <div class="container">
+    <span class="badge badge-gold mb-16">📋 Step 1 of 2 — Personal, Trade &amp; Identity Profile</span>
+    <h1 class="display-2">Identity Verification</h1>
+    <p class="lead">Complete your profile to unlock full trading access — international listings, escrow payments, logistics &amp; market intelligence.</p>
+  </div>
+</div>
+
+<!-- ══ KYC Layout ══════════════════════════════════════════ -->
+<div class="kyc-layout container">
+
+  <!-- Sidebar -->
+  <aside class="kyc-sidebar">
+    <div class="kyc-progress-card">
+      <h3>Verification Progress</h3>
+      <div class="kyc-overall-row">
+        <div class="progress-track" style="flex:1;">
+          <div class="progress-fill" id="kycProgress" style="width:0%;"></div>
+        </div>
+        <span class="kyc-overall-pct" id="kycPct">0%</span>
+      </div>
+      <div class="kyc-steps-list">
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot active" id="kdot-1">1</div>
+          <div><div class="kyc-step-title">Personal Details</div><div class="kyc-step-sub">Name, contact, nationality</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot pending" id="kdot-2">2</div>
+          <div><div class="kyc-step-title">Trade Profile</div><div class="kyc-step-sub">Trading zones &amp; categories</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot pending" id="kdot-3">3</div>
+          <div><div class="kyc-step-title">Identity Document</div><div class="kyc-step-sub">Government-issued ID</div></div>
+        </div>
+        <div class="kyc-step-item" style="opacity:.55;">
+          <div class="kyc-step-dot pending">4</div>
+          <div><div class="kyc-step-title">Business Documents</div><div class="kyc-step-sub">CAC, Permit (Step 2)</div></div>
+        </div>
+        <div class="kyc-step-item" style="opacity:.55;">
+          <div class="kyc-step-dot pending">5</div>
+          <div><div class="kyc-step-title">Review &amp; Activate</div><div class="kyc-step-sub">Final check (Step 2)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="kyc-info-card">
+      <h4>🛡 Why Verify?</h4>
+      <p>Verified traders get a ✅ trust badge, access to international listings, escrow protection, and priority matching with premium buyers worldwide.</p>
+      <div class="kyc-security-badges">
+        <span>🔒 SSL Encrypted</span>
+        <span>🛡 NDPR Compliant</span>
+        <span>🌍 GDPR Ready</span>
+        <span>📜 Basel Compliant</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="kyc-main">
+
+    <!-- ── Section 1: Personal Details ──────────────────── -->
+    <div class="kyc-section active" id="kyc-section-1">
+      <div class="kyc-section-header">
+        <div class="kyc-section-num">01</div>
+        <div>
+          <h2>Personal Details</h2>
+          <p>Your name, date of birth, nationality and contact information. Required to generate legal trade documents and comply with international trade regulations.</p>
+        </div>
+      </div>
+      <div class="kyc-form-card">
+        <form id="kycForm1">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">First Name <span class="req">*</span></label>
+              <input type="text" name="kycFirst" class="form-control" placeholder="As on ID"
+                data-validate="required" data-label="First Name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name <span class="req">*</span></label>
+              <input type="text" name="kycLast" class="form-control" placeholder="As on ID"
+                data-validate="required" data-label="Last Name"/>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Middle Name</label>
+              <input type="text" name="kycMiddle" class="form-control" placeholder="Optional"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date of Birth <span class="req">*</span></label>
+              <input type="date" name="kycDob" class="form-control"
+                data-validate="required" data-label="Date of Birth"/>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Gender</label>
+              <select name="kycGender" class="form-control form-select">
+                <option value="">Prefer not to say</option>
+                <option>Male</option><option>Female</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number <span class="req">*</span></label>
+              <input type="tel" name="kycPhone" class="form-control" placeholder="+234 800 000 0000"
+                data-validate="required" data-label="Phone Number"/>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Nationality <span class="req">*</span></label>
+              <select name="kycNationality" class="form-control form-select"
+                data-validate="required" data-label="Nationality">
+                <option value="">Select…</option>
+                <option selected>Nigerian</option>
+                <option>Ghanaian</option><option>Kenyan</option><option>South African</option>
+                <option>Egyptian</option><option>Ethiopian</option><option>Tanzanian</option>
+                <option>British</option><option>American</option><option>German</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Country of Residence <span class="req">*</span></label>
+              <select name="kycCountry" class="form-control form-select"
+                data-validate="required" data-label="Country" onchange="toggleKYCState(this.value)">
+                <option value="">Select…</option>
+                <option value="Nigeria" selected>🇳🇬 Nigeria</option>
+                <option value="Ghana">🇬🇭 Ghana</option>
+                <option value="Kenya">🇰🇪 Kenya</option>
+                <option value="South Africa">🇿🇦 South Africa</option>
+                <option value="UK">🇬🇧 UK</option>
+                <option value="USA">🇺🇸 USA</option>
+                <option value="Germany">🇩🇪 Germany</option>
+                <option value="Other">🌍 Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="kycStateGroup">
+            <label class="form-label">State of Origin (Nigeria) <span class="req">*</span></label>
+            <select name="kycStateOrigin" class="form-control form-select"
+              data-validate="required" data-label="State of Origin">
+              <option value="">Select state…</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+              <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+              <option>Benue</option><option>Borno</option><option>Cross River</option>
+              <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+              <option>Ekiti</option><option>Enugu</option><option>FCT – Abuja</option>
+              <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+              <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+              <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+              <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+              <option>Ogun</option><option>Ondo</option><option>Osun</option>
+              <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+              <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+              <option>Zamfara</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Residential Address <span class="req">*</span></label>
+            <textarea name="kycAddress" class="form-control" rows="3"
+              placeholder="Full address — house number, street, area, city, state"
+              data-validate="required" data-label="Address"></textarea>
+          </div>
+          <div class="kyc-nav">
+            <span></span>
+            <button type="button" class="btn btn-primary" onclick="nextSection(1)">
+              Save &amp; Continue →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Section 2: Trade Profile ──────────────────────── -->
+    <div class="kyc-section" id="kyc-section-2">
+      <div class="kyc-section-header">
+        <div class="kyc-section-num">02</div>
+        <div>
+          <h2>Trade Profile</h2>
+          <p>Tell us about your trading activities and preferences. This helps us match you with the right buyers or sellers and activate the appropriate market zones for your account.</p>
+        </div>
+      </div>
+      <div class="kyc-form-card">
+        <form id="kycForm2">
+          <div class="form-group">
+            <label class="form-label">Primary Trading Role <span class="req">*</span></label>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px;">
+              <label class="doc-type-card" onclick="selectCard(this,'tradingRole')">
+                <input type="radio" name="tradingRole" value="seller"/>
+                <div class="doc-type-inner"><span>🏪</span><strong>Seller</strong><small>I have waste to sell</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectCard(this,'tradingRole')">
+                <input type="radio" name="tradingRole" value="buyer"/>
+                <div class="doc-type-inner"><span>🛒</span><strong>Buyer</strong><small>I need to source waste</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectCard(this,'tradingRole')">
+                <input type="radio" name="tradingRole" value="both"/>
+                <div class="doc-type-inner"><span>🔄</span><strong>Both</strong><small>Buy &amp; sell</small></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred Market Zone <span class="req">*</span></label>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px;">
+              <label class="doc-type-card" onclick="selectCard(this,'marketZone')">
+                <input type="radio" name="marketZone" value="local-nigeria"/>
+                <div class="doc-type-inner"><span>🇳🇬</span><strong>Local</strong><small>Within Nigeria</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectCard(this,'marketZone')">
+                <input type="radio" name="marketZone" value="african-continent"/>
+                <div class="doc-type-inner"><span>🌍</span><strong>African</strong><small>Pan-African</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectCard(this,'marketZone')">
+                <input type="radio" name="marketZone" value="international"/>
+                <div class="doc-type-inner"><span>🌐</span><strong>Global</strong><small>Worldwide</small></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Waste Categories You Trade <span class="req">*</span></label>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;">
+              <label class="check-label"><input type="checkbox" name="wasteType" value="domestic"/>🏠 Domestic</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="industrial"/>🏭 Industrial</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="ewaste"/>💻 E-Waste</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="agricultural"/>🌾 Agricultural</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="plastic"/>♳ Plastic</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="metal"/>⚙ Scrap Metal</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="paper"/>📦 Paper</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="construction"/>🏗 Construction</label>
+              <label class="check-label"><input type="checkbox" name="wasteType" value="textile"/>🧵 Textile</label>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Average Monthly Volume</label>
+              <select name="monthlyVolume" class="form-control form-select">
+                <option value="">Select range…</option>
+                <option>Under 1 tonne</option>
+                <option>1 – 10 tonnes</option>
+                <option>10 – 50 tonnes</option>
+                <option>50 – 200 tonnes</option>
+                <option>200 – 1,000 tonnes</option>
+                <option>Over 1,000 tonnes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Trading Experience</label>
+              <select name="experience" class="form-control form-select">
+                <option value="">Select…</option>
+                <option>New to waste trading</option>
+                <option>1 – 2 years</option>
+                <option>3 – 5 years</option>
+                <option>5 – 10 years</option>
+                <option>Over 10 years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred Currency for Transactions</label>
+            <select name="preferredCurrency" class="form-control form-select">
+              <option value="NGN">🇳🇬 Nigerian Naira (NGN)</option>
+              <option value="USD">🇺🇸 US Dollar (USD)</option>
+              <option value="GBP">🇬🇧 British Pound (GBP)</option>
+              <option value="EUR">🇪🇺 Euro (EUR)</option>
+              <option value="GHS">🇬🇭 Ghanaian Cedi (GHS)</option>
+              <option value="KES">🇰🇪 Kenyan Shilling (KES)</option>
+              <option value="ZAR">🇿🇦 South African Rand (ZAR)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Business / Organisation Name (if applicable)</label>
+            <input type="text" name="businessName" class="form-control"
+              placeholder="e.g. EcoRecycle Nigeria Ltd, Green Scrap Co."/>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">How did you hear about Waste2Wealth Hub?</label>
+            <select name="referral" class="form-control form-select">
+              <option value="">Select…</option>
+              <option>Google / Search Engine</option>
+              <option>Social Media (Instagram, Facebook, X)</option>
+              <option>Friend or Colleague</option>
+              <option>WhatsApp Group</option>
+              <option>Industry Association</option>
+              <option>Trade Fair / Conference</option>
+              <option>News Article</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="kyc-nav">
+            <button type="button" class="btn btn-outline" onclick="prevSection(2)">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="nextSection(2)">Save &amp; Continue →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Section 3: Identity Document ─────────────────── -->
+    <div class="kyc-section" id="kyc-section-3">
+      <div class="kyc-section-header">
+        <div class="kyc-section-num">03</div>
+        <div>
+          <h2>Identity Document</h2>
+          <p>Upload a valid government-issued photo ID. Required to activate international trading, escrow payments and verified trader status. JPG, PNG, PDF — max 5MB.</p>
+        </div>
+      </div>
+      <div class="kyc-form-card">
+        <form id="kycForm3">
+          <div class="form-group">
+            <label class="form-label">Document Type <span class="req">*</span></label>
+            <div class="doc-type-grid">
+              <label class="doc-type-card" onclick="selectDocType(this)">
+                <input type="radio" name="idType" value="nin"/>
+                <div class="doc-type-inner"><span>🪪</span><strong>NIN Slip</strong><small>National ID (NG)</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectDocType(this)">
+                <input type="radio" name="idType" value="passport"/>
+                <div class="doc-type-inner"><span>📘</span><strong>Passport</strong><small>International</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectDocType(this)">
+                <input type="radio" name="idType" value="drivers"/>
+                <div class="doc-type-inner"><span>🚗</span><strong>Driver's Licence</strong><small>Any Country</small></div>
+              </label>
+              <label class="doc-type-card" onclick="selectDocType(this)">
+                <input type="radio" name="idType" value="voters"/>
+                <div class="doc-type-inner"><span>🗳️</span><strong>Voter's Card</strong><small>INEC Issued</small></div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Document Number <span class="req">*</span></label>
+            <input type="text" name="idNumber" class="form-control"
+              placeholder="e.g. 12345678901 or A12345678"
+              data-validate="required" data-label="Document Number"/>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Upload Document — Front Page <span class="req">*</span></label>
+            <div class="upload-zone" id="zone1" onclick="document.getElementById('idFront').click()">
+              <div class="upload-icon">📄</div>
+              <p><strong>Click to upload</strong> or drag and drop</p>
+              <small>JPG, PNG, PDF — Max 5MB</small>
+              <div id="prev1" class="upload-file-name" style="display:none;"></div>
+            </div>
+            <input type="file" id="idFront" name="idFront" accept=".jpg,.jpeg,.png,.pdf"
+              style="display:none;" onchange="handleUpload(this,'zone1','prev1','id-front','_idFrontUrl')"/>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Upload Document — Back Page (if applicable)</label>
+            <div class="upload-zone" id="zone2" onclick="document.getElementById('idBack').click()">
+              <div class="upload-icon">📄</div>
+              <p><strong>Click to upload</strong> or drag and drop</p>
+              <small>JPG, PNG, PDF — Max 5MB</small>
+              <div id="prev2" class="upload-file-name" style="display:none;"></div>
+            </div>
+            <input type="file" id="idBack" name="idBack" accept=".jpg,.jpeg,.png,.pdf"
+              style="display:none;" onchange="handleUpload(this,'zone2','prev2','id-back','_idBackUrl')"/>
+          </div>
+
+          <div class="alert alert-gold">
+            🛡 Your ID documents are encrypted and stored securely. They are reviewed only by our compliance team and never shared with third parties.
+          </div>
+
+          <div class="kyc-nav">
+            <button type="button" class="btn btn-outline" onclick="prevSection(3)">← Back</button>
+            <button type="button" class="btn btn-primary" onclick="saveAndContinue()">
+              Save &amp; Go to Step 2 →
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /kyc-layout -->
+
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Waste2Wealth Hub Ltd. All rights reserved.</span>
+      <span>🔒 All KYC data encrypted · NDPR &amp; GDPR Compliant · Basel Convention Ready</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+let currentSec = 1;
+const totalSecs = 3;
+const kycData   = {};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await SupabaseAuth.requireAuth('login.html');
+  try {
+    const existing = await KYCService.getMine();
+    if (existing) {
+      const sv = (n, v) => { const el = document.querySelector(`[name="${n}"]`); if (el && v) el.value = v; };
+      sv('kycFirst', existing.first_name); sv('kycLast', existing.last_name);
+      sv('kycMiddle', existing.middle_name); sv('kycDob', existing.date_of_birth);
+      sv('kycNationality', existing.nationality); sv('kycStateOrigin', existing.state_of_origin);
+      sv('kycAddress', existing.residential_address); sv('kycPhone', existing.phone);
+      sv('idNumber', existing.id_number);
+    }
+  } catch (e) {}
+  updateProgress();
+
+  document.querySelectorAll('.upload-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); window._toast.show('Please click the zone to upload.', 'info'); });
+  });
+});
+
+function toggleKYCState(country) {
+  document.getElementById('kycStateGroup').style.display = country === 'Nigeria' ? 'block' : 'none';
+}
+
+function updateProgress() {
+  const pct = Math.round(((currentSec - 1) / 5) * 100);
+  document.getElementById('kycProgress').style.width = pct + '%';
+  document.getElementById('kycPct').textContent = pct + '%';
+  for (let i = 1; i <= totalSecs; i++) {
+    const dot = document.getElementById(`kdot-${i}`);
+    if (!dot) continue;
+    if (i < currentSec)        { dot.className = 'kyc-step-dot done';    dot.textContent = '✓'; }
+    else if (i === currentSec) { dot.className = 'kyc-step-dot active';  dot.textContent = i; }
+    else                       { dot.className = 'kyc-step-dot pending'; dot.textContent = i; }
+  }
+}
+
+function nextSection(current) {
+  const form = document.getElementById(`kycForm${current}`);
+  const result = FormValidator.validate(form);
+  if (!result.isValid) { FormValidator.showErrors(form, result.errors); return; }
+  new FormData(form).forEach((v, k) => kycData[k] = v);
+  KYCService.save(buildPayload()).catch(e => console.warn('Auto-save:', e.message));
+  document.getElementById(`kyc-section-${current}`).classList.remove('active');
+  document.getElementById(`kyc-section-${current + 1}`).classList.add('active');
+  currentSec = current + 1;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevSection(current) {
+  document.getElementById(`kyc-section-${current}`).classList.remove('active');
+  document.getElementById(`kyc-section-${current - 1}`).classList.add('active');
+  currentSec = current - 1;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function saveAndContinue() {
+  const form = document.getElementById('kycForm3');
+  const result = FormValidator.validate(form);
+  if (!result.isValid) { FormValidator.showErrors(form, result.errors); return; }
+  new FormData(form).forEach((v, k) => kycData[k] = v);
+  try {
+    await KYCService.save(buildPayload());
+    window._toast.show('Progress saved! Moving to Step 2…', 'success');
+    setTimeout(() => { window.location.href = 'kyc2.html'; }, 1000);
+  } catch (e) {
+    window._toast.show('Could not save data. Please try again.', 'error');
+  }
+}
+
+function buildPayload() {
+  return {
+    first_name:          kycData.kycFirst        || null,
+    middle_name:         kycData.kycMiddle        || null,
+    last_name:           kycData.kycLast          || null,
+    date_of_birth:       kycData.kycDob           || null,
+    gender:              kycData.kycGender        || null,
+    nationality:         kycData.kycNationality   || null,
+    country:             kycData.kycCountry       || null,
+    state_of_origin:     kycData.kycStateOrigin   || null,
+    residential_address: kycData.kycAddress       || null,
+    phone:               kycData.kycPhone         || null,
+    trading_role:        kycData.tradingRole      || null,
+    market_zone:         kycData.marketZone       || null,
+    business_name:       kycData.businessName     || null,
+    monthly_volume:      kycData.monthlyVolume    || null,
+    experience:          kycData.experience       || null,
+    preferred_currency:  kycData.preferredCurrency|| null,
+    id_type:             kycData.idType           || null,
+    id_number:           kycData.idNumber         || null,
+    id_front_url:        kycData._idFrontUrl      || null,
+    id_back_url:         kycData._idBackUrl       || null,
+  };
+}
+
+async function handleUpload(input, zoneId, prevId, folder, urlKey) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { window._toast.show('File too large. Max 5MB.', 'error'); return; }
+  const zone = document.getElementById(zoneId);
+  const prev = document.getElementById(prevId);
+  zone.classList.add('uploaded'); prev.style.display = 'flex';
+  prev.innerHTML = `⏳ Uploading ${file.name}…`;
+  try {
+    const url = await KYCService.uploadFile(file, folder);
+    kycData[urlKey] = url;
+    prev.innerHTML = `✓ ${file.name}`;
+    window._toast.show(`${file.name} uploaded successfully.`, 'success');
+  } catch (err) {
+    kycData[urlKey] = null;
+    prev.innerHTML = `✓ ${file.name} (noted)`;
+    window._toast.show(`${file.name} noted. Configure storage to enable cloud upload.`, 'info');
+  }
+}
+
+function selectDocType(card) {
+  document.querySelectorAll('.doc-type-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  kycData.idType = card.querySelector('input').value;
+}
+
+function selectCard(card, groupName) {
+  const parent = card.closest('div');
+  parent.querySelectorAll('.doc-type-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  kycData[groupName] = card.querySelector('input').value;
+}
+</script>
+</body>
+</html>

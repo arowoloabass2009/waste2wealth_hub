@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Trading Dashboard — Waste2Wealth Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+</head>
+<body>
+
+<!-- ══ Navbar ══════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">♻️</div>
+      <span class="navbar-name">Waste2Wealth <span>Hub</span><small>Trader Dashboard</small></span>
+    </a>
+    <div class="navbar-actions">
+      <span id="navUserName" style="font-size:.88rem;color:var(--text-soft);font-weight:600;">Loading…</span>
+      <a href="index.html" class="btn btn-ghost btn-sm">← Marketplace</a>
+      <button class="btn btn-dark btn-sm" onclick="SupabaseAuth.signOut()">Sign Out</button>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="dashboard-root">
+
+  <!-- ══ Sidebar ════════════════════════════════════════════ -->
+  <aside class="dash-sidebar">
+    <div class="dash-sidebar-section">Overview</div>
+    <div class="dash-nav-item active" onclick="showTab('overview')">
+      <span class="dash-nav-icon">📊</span> Dashboard
+    </div>
+    <div class="dash-nav-item" onclick="showTab('listings')">
+      <span class="dash-nav-icon">📋</span> My Listings
+      <span class="dash-nav-badge" id="listingsBadge">0</span>
+    </div>
+    <div class="dash-nav-item" onclick="showTab('trades')">
+      <span class="dash-nav-icon">🔄</span> Active Trades
+      <span class="dash-nav-badge" id="tradesBadge">0</span>
+    </div>
+
+    <div class="dash-sidebar-section">Marketplace</div>
+    <div class="dash-nav-item" onclick="showTab('browse')">
+      <span class="dash-nav-icon">🔍</span> Browse Listings
+    </div>
+    <div class="dash-nav-item" onclick="showTab('post')">
+      <span class="dash-nav-icon">➕</span> Post Waste Listing
+    </div>
+    <div class="dash-nav-item" onclick="showTab('messages')">
+      <span class="dash-nav-icon">💬</span> Messages
+    </div>
+
+    <div class="dash-sidebar-section">Finance</div>
+    <div class="dash-nav-item" onclick="showTab('wallet')">
+      <span class="dash-nav-icon">💳</span> Wallet &amp; Payments
+    </div>
+    <div class="dash-nav-item" onclick="showTab('escrow')">
+      <span class="dash-nav-icon">🔐</span> Escrow
+    </div>
+
+    <div class="dash-sidebar-section">Tools</div>
+    <div class="dash-nav-item" onclick="showTab('analytics')">
+      <span class="dash-nav-icon">📈</span> Market Analytics
+    </div>
+    <div class="dash-nav-item" onclick="showTab('logistics')">
+      <span class="dash-nav-icon">🚛</span> Logistics
+    </div>
+    <div class="dash-nav-item" onclick="showTab('certificates')">
+      <span class="dash-nav-icon">🌱</span> Certifications
+    </div>
+
+    <div class="dash-sidebar-section">Account</div>
+    <div class="dash-nav-item" onclick="window.location.href='kyc1.html'">
+      <span class="dash-nav-icon">🪪</span> KYC Verification
+    </div>
+    <div class="dash-nav-item" onclick="showTab('settings')">
+      <span class="dash-nav-icon">⚙</span> Settings
+    </div>
+    <div class="dash-nav-item" onclick="SupabaseAuth.signOut()" style="color:var(--coral);margin-top:8px;">
+      <span class="dash-nav-icon">🚪</span> Sign Out
+    </div>
+  </aside>
+
+  <!-- ══ Main Content ════════════════════════════════════════ -->
+  <main class="dash-main">
+
+    <!-- ── Overview Tab ──────────────────────────────────── -->
+    <div id="tab-overview">
+      <div class="dash-header">
+        <div class="dash-welcome">Welcome back, <span id="dashUserName">Trader</span> 👋</div>
+        <div class="dash-sub" id="dashUserRole">Waste Trader · Waste2Wealth Hub</div>
+      </div>
+
+      <!-- KYC Alert -->
+      <div id="kycAlert" class="alert alert-gold" style="margin-bottom:28px;display:none;">
+        🪪 <strong>Complete your verification</strong> to unlock international listings and escrow payments.
+        <a href="kyc1.html" style="color:var(--green-dark);font-weight:800;margin-left:8px;">Verify Now →</a>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="dash-stats-row">
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(6,95,70,.12);">📋</div>
+          <div class="dash-stat-val" id="statListings">0</div>
+          <div class="dash-stat-label">My Listings</div>
+          <div class="dash-stat-change up">+ 0 this month</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(217,119,6,.12);">💰</div>
+          <div class="dash-stat-val" id="statEarnings">₦0</div>
+          <div class="dash-stat-label">Total Earnings</div>
+          <div class="dash-stat-change up">Lifetime proceeds</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(3,105,161,.12);">🌍</div>
+          <div class="dash-stat-val" id="statCountries">0</div>
+          <div class="dash-stat-label">Countries Reached</div>
+          <div class="dash-stat-change up">Buyer countries</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:rgba(124,58,237,.12);">⭐</div>
+          <div class="dash-stat-val" id="statRating">—</div>
+          <div class="dash-stat-label">Trader Rating</div>
+          <div class="dash-stat-change up">Based on reviews</div>
+        </div>
+      </div>
+
+      <!-- Verification Status Card -->
+      <div class="grid-2" style="margin-bottom:32px;">
+        <div class="card">
+          <div class="card-body">
+            <h3 style="font-size:1rem;font-weight:800;color:var(--green-dark);margin-bottom:16px;">🪪 Verification Status</h3>
+            <div id="kycStatusContent">
+              <div style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(217,119,6,.08);border-radius:var(--radius-sm);border:1px solid rgba(217,119,6,.2);">
+                <span style="font-size:1.5rem;">⏳</span>
+                <div>
+                  <div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Not Yet Verified</div>
+                  <div style="font-size:.78rem;color:var(--text-muted);">Complete KYC to unlock international trading</div>
+                </div>
+              </div>
+              <a href="kyc1.html" class="btn btn-primary w-full mt-16">Complete Verification →</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h3 style="font-size:1rem;font-weight:800;color:var(--green-dark);margin-bottom:16px;">📊 Market Prices Today</h3>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.88rem;">
+                <span>⚙ Aluminium Scrap</span><span style="font-weight:700;color:var(--green-dark);">₦180,000/t</span><span style="color:var(--green-light);font-size:.75rem;">▲ 2.4%</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.88rem;">
+                <span>🔩 Steel Scrap</span><span style="font-weight:700;color:var(--green-dark);">₦95,000/t</span><span style="color:var(--green-light);font-size:.75rem;">▲ 1.1%</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.88rem;">
+                <span>♳ PET Plastic</span><span style="font-weight:700;color:var(--green-dark);">₦4,200/kg</span><span style="color:var(--coral);font-size:.75rem;">▼ 0.6%</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.88rem;">
+                <span>💻 E-Waste (Mixed)</span><span style="font-weight:700;color:var(--green-dark);">₦8,500/kg</span><span style="color:var(--green-light);font-size:.75rem;">▲ 3.8%</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.88rem;">
+                <span>📦 Cardboard Bales</span><span style="font-weight:700;color:var(--green-dark);">₦1,800/kg</span><span style="color:var(--green-light);font-size:.75rem;">▲ 0.9%</span>
+              </div>
+            </div>
+            <div style="font-size:.74rem;color:var(--text-muted);margin-top:12px;">Prices updated daily. Source: Waste2Wealth Market Index.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-body">
+          <h3 style="font-size:1rem;font-weight:800;color:var(--green-dark);margin-bottom:20px;">⚡ Quick Actions</h3>
+          <div class="grid-4" style="gap:16px;">
+            <button class="btn btn-primary" onclick="showTab('post')">➕ Post Listing</button>
+            <button class="btn btn-outline" onclick="showTab('browse')">🔍 Browse Market</button>
+            <button class="btn btn-gold" onclick="window._toast.show('Logistics feature launching soon!','info')">🚛 Book Pickup</button>
+            <a href="kyc1.html" class="btn btn-dark">🪪 Complete KYC</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market Zones Summary -->
+      <div class="card mt-32">
+        <div class="card-body">
+          <h3 style="font-size:1rem;font-weight:800;color:var(--green-dark);margin-bottom:20px;">🌍 Market Zone Activity</h3>
+          <div class="grid-3" style="gap:16px;">
+            <div style="background:rgba(6,95,70,.06);border-radius:var(--radius-sm);padding:18px;border:1px solid rgba(6,95,70,.12);">
+              <div style="font-size:1.4rem;margin-bottom:8px;">🇳🇬</div>
+              <div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Local — Nigeria</div>
+              <div style="font-size:1.5rem;font-weight:900;color:var(--green);margin:6px 0;">34,200+</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Active listings · All 36 states</div>
+            </div>
+            <div style="background:rgba(217,119,6,.06);border-radius:var(--radius-sm);padding:18px;border:1px solid rgba(217,119,6,.12);">
+              <div style="font-size:1.4rem;margin-bottom:8px;">🌍</div>
+              <div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">African Market</div>
+              <div style="font-size:1.5rem;font-weight:900;color:var(--gold);margin:6px 0;">12,800+</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Active listings · 34 countries</div>
+            </div>
+            <div style="background:rgba(3,105,161,.06);border-radius:var(--radius-sm);padding:18px;border:1px solid rgba(3,105,161,.12);">
+              <div style="font-size:1.4rem;margin-bottom:8px;">🌐</div>
+              <div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">International</div>
+              <div style="font-size:1.5rem;font-weight:900;color:var(--blue-ocean);margin:6px 0;">7,000+</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Active listings · 78+ countries</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Post Listing Tab ───────────────────────────────── -->
+    <div id="tab-post" style="display:none;">
+      <div class="dash-header">
+        <div class="dash-welcome">Post a Waste Listing</div>
+        <div class="dash-sub">List your waste for sale to local, African or international buyers.</div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form id="listingForm">
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Listing Title <span class="req">*</span></label>
+                <input type="text" name="title" class="form-control" placeholder="e.g. Aluminium Scrap — Grade A · 20 Tonnes"
+                  data-validate="required" data-label="Title"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Waste Category <span class="req">*</span></label>
+                <select name="category" class="form-control form-select"
+                  data-validate="required" data-label="Category">
+                  <option value="">Select category…</option>
+                  <option value="domestic">🏠 Domestic / Household</option>
+                  <option value="industrial">🏭 Industrial</option>
+                  <option value="ewaste">💻 E-Waste / Electronics</option>
+                  <option value="agricultural">🌾 Agricultural</option>
+                  <option value="medical">🏥 Medical (Licensed Only)</option>
+                  <option value="construction">🏗 Construction &amp; Demolition</option>
+                  <option value="plastic">♳ Plastic / Polymer</option>
+                  <option value="metal">⚙ Scrap Metal</option>
+                  <option value="paper">📦 Paper / Cardboard</option>
+                  <option value="textile">🧵 Textile / Fabric</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Quantity Available <span class="req">*</span></label>
+                <input type="number" name="quantity" class="form-control" placeholder="e.g. 50"
+                  min="0.1" step="0.1" data-validate="required" data-label="Quantity"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Unit of Measurement <span class="req">*</span></label>
+                <select name="unit" class="form-control form-select"
+                  data-validate="required" data-label="Unit">
+                  <option value="">Select unit…</option>
+                  <option value="kg">Kilograms (kg)</option>
+                  <option value="tonnes">Tonnes (t)</option>
+                  <option value="litres">Litres (L)</option>
+                  <option value="units">Units / Pieces</option>
+                  <option value="bales">Bales</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Price per Unit <span class="req">*</span></label>
+                <input type="number" name="pricePerUnit" class="form-control" placeholder="e.g. 180000"
+                  min="1" data-validate="required" data-label="Price"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Currency</label>
+                <select name="currency" class="form-control form-select">
+                  <option value="NGN">🇳🇬 NGN — Naira</option>
+                  <option value="USD">🇺🇸 USD — Dollar</option>
+                  <option value="GBP">🇬🇧 GBP — Pound</option>
+                  <option value="EUR">🇪🇺 EUR — Euro</option>
+                  <option value="GHS">🇬🇭 GHS — Cedi</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Market Zone <span class="req">*</span></label>
+                <select name="zone" class="form-control form-select"
+                  data-validate="required" data-label="Zone">
+                  <option value="">Select zone…</option>
+                  <option value="local-nigeria">🇳🇬 Local — Within Nigeria</option>
+                  <option value="african-continent">🌍 African Market</option>
+                  <option value="international">🌐 International / Global</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pickup / Location State <span class="req">*</span></label>
+                <select name="state" class="form-control form-select"
+                  data-validate="required" data-label="Location">
+                  <option value="">Select state…</option>
+                  <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option>
+                  <option>Anambra</option><option>Bauchi</option><option>Bayelsa</option>
+                  <option>Benue</option><option>Borno</option><option>Cross River</option>
+                  <option>Delta</option><option>Ebonyi</option><option>Edo</option>
+                  <option>Ekiti</option><option>Enugu</option><option>FCT – Abuja</option>
+                  <option>Gombe</option><option>Imo</option><option>Jigawa</option>
+                  <option>Kaduna</option><option>Kano</option><option>Katsina</option>
+                  <option>Kebbi</option><option>Kogi</option><option>Kwara</option>
+                  <option>Lagos</option><option>Nasarawa</option><option>Niger</option>
+                  <option>Ogun</option><option>Ondo</option><option>Osun</option>
+                  <option>Oyo</option><option>Plateau</option><option>Rivers</option>
+                  <option>Sokoto</option><option>Taraba</option><option>Yobe</option>
+                  <option>Zamfara</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="4"
+                placeholder="Describe the waste — condition, grade, source, any relevant certifications, minimum order quantity, etc."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="check-label">
+                <input type="checkbox" id="listingTerms"/>
+                <span>I confirm this listing complies with platform terms, applicable waste trading regulations and Basel Convention requirements.</span>
+              </label>
+            </div>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button type="submit" class="btn btn-primary btn-lg" id="postBtn">Publish Listing →</button>
+              <button type="button" class="btn btn-outline" onclick="showTab('overview')">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Placeholder tabs ───────────────────────────────── -->
+    <div id="tab-listings"    style="display:none;"><div class="dash-header"><div class="dash-welcome">My Listings</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">📋</div><h3>No listings yet</h3><p style="color:var(--text-muted);margin:8px 0 24px;">Post your first waste listing and start receiving offers from verified buyers.</p><button class="btn btn-primary" onclick="showTab('post')">➕ Post First Listing</button></div></div></div>
+
+    <div id="tab-trades"      style="display:none;"><div class="dash-header"><div class="dash-welcome">Active Trades</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">🔄</div><h3>No active trades</h3><p style="color:var(--text-muted);margin:8px 0 24px;">Your active negotiations and confirmed trades will appear here.</p></div></div></div>
+
+    <div id="tab-browse"      style="display:none;"><div class="dash-header"><div class="dash-welcome">Browse Listings</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">🔍</div><h3>Marketplace Browser</h3><p style="color:var(--text-muted);margin:8px 0 24px;">Full listing search with filters is coming soon. For now, visit the marketplace homepage.</p><a href="index.html#categories" class="btn btn-primary">Explore Marketplace →</a></div></div></div>
+
+    <div id="tab-messages"    style="display:none;"><div class="dash-header"><div class="dash-welcome">Messages</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">💬</div><h3>No messages yet</h3><p style="color:var(--text-muted);margin:8px 0;">Messages from buyers and sellers will appear here.</p></div></div></div>
+
+    <div id="tab-wallet"      style="display:none;"><div class="dash-header"><div class="dash-welcome">Wallet &amp; Payments</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">💳</div><h3>Wallet Coming Soon</h3><p style="color:var(--text-muted);margin:8px 0;">Multi-currency wallet and instant payout will be available here.</p></div></div></div>
+
+    <div id="tab-escrow"      style="display:none;"><div class="dash-header"><div class="dash-welcome">Escrow</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">🔐</div><h3>No Escrow Funds</h3><p style="color:var(--text-muted);margin:8px 0;">Escrow-protected trade funds will be managed here.</p></div></div></div>
+
+    <div id="tab-analytics"   style="display:none;"><div class="dash-header"><div class="dash-welcome">Market Analytics</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">📈</div><h3>Analytics Coming Soon</h3><p style="color:var(--text-muted);margin:8px 0;">Live waste commodity prices, demand forecasts and trade trends.</p></div></div></div>
+
+    <div id="tab-logistics"   style="display:none;"><div class="dash-header"><div class="dash-welcome">Logistics</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">🚛</div><h3>Logistics Coming Soon</h3><p style="color:var(--text-muted);margin:8px 0;">Book pickups, track consignments and manage shipping documents.</p></div></div></div>
+
+    <div id="tab-certificates" style="display:none;"><div class="dash-header"><div class="dash-welcome">Sustainability Certifications</div></div><div class="card"><div class="card-body text-center" style="padding:60px 20px;"><div style="font-size:3rem;margin-bottom:16px;">🌱</div><h3>Certifications Coming Soon</h3><p style="color:var(--text-muted);margin:8px 0;">Earn ESG and circular economy certificates for your trading activities.</p></div></div></div>
+
+    <div id="tab-settings"    style="display:none;"><div class="dash-header"><div class="dash-welcome">Account Settings</div></div><div class="card"><div class="card-body"><p>Account settings, notification preferences and security options coming soon.</p><div class="mt-16"><a href="kyc1.html" class="btn btn-outline">Update KYC Profile</a></div></div></div></div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+const TABS = ['overview','listings','trades','browse','post','messages','wallet','escrow','analytics','logistics','certificates','settings'];
+
+function showTab(name) {
+  TABS.forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if (el) el.style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.dash-nav-item').forEach(item => item.classList.remove('active'));
+  const active = document.querySelector(`.dash-nav-item[onclick*="${name}"]`);
+  if (active) active.classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await SupabaseAuth.requireAuth('login.html');
+  if (!session) return;
+
+  const user = session.user;
+  const meta = user.user_metadata || {};
+  const name = (meta.firstName || '') + ' ' + (meta.lastName || '');
+  document.getElementById('dashUserName').textContent = name.trim() || 'Trader';
+  document.getElementById('navUserName').textContent  = (name.trim() || user.email || 'Trader');
+  document.getElementById('dashUserRole').textContent = (meta.role ? meta.role.charAt(0).toUpperCase() + meta.role.slice(1) : 'Trader') + ' · Waste2Wealth Hub';
+
+  // Check KYC
+  try {
+    const kyc = await KYCService.getMine();
+    if (!kyc || kyc.status === 'not_started' || !kyc.status) {
+      document.getElementById('kycAlert').style.display = 'flex';
+    } else if (kyc.status === 'verified') {
+      document.getElementById('kycStatusContent').innerHTML =
+        '<div style="display:flex;align-items:center;gap:12px;padding:16px;background:rgba(6,95,70,.08);border-radius:var(--radius-sm);border:1px solid rgba(6,95,70,.2);"><span style="font-size:1.5rem;">✅</span><div><div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Verified Trader</div><div style="font-size:.78rem;color:var(--text-muted);">Full access — local, African &amp; international</div></div></div>';
+    }
+  } catch (e) {}
+
+  // Load listings count
+  try {
+    const listings = await ListingService.getMine();
+    document.getElementById('statListings').textContent = listings.length;
+    document.getElementById('listingsBadge').textContent = listings.length;
+  } catch (e) {}
+
+  // Post listing form
+  document.getElementById('listingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!document.getElementById('listingTerms').checked) {
+      window._toast.show('Please agree to listing terms before posting.', 'error'); return;
+    }
+    const form   = e.target;
+    const result = FormValidator.validate(form);
+    if (!result.isValid) { FormValidator.showErrors(form, result.errors); return; }
+
+    const fd  = new FormData(form);
+    const btn = document.getElementById('postBtn');
+    btn.textContent = 'Publishing…';
+    btn.classList.add('btn-loading');
+    btn.disabled = true;
+
+    try {
+      await ListingService.create({
+        title:         fd.get('title'),
+        category:      fd.get('category'),
+        quantity:      parseFloat(fd.get('quantity')),
+        unit:          fd.get('unit'),
+        price_per_unit:parseFloat(fd.get('pricePerUnit')),
+        currency:      fd.get('currency') || 'NGN',
+        zone:          fd.get('zone'),
+        state:         fd.get('state'),
+        country:       'Nigeria',
+        description:   fd.get('description') || null,
+        status:        'active',
+      });
+      window._toast.show('Listing published! Buyers can now find it.', 'success');
+      form.reset();
+      setTimeout(() => showTab('listings'), 1500);
+    } catch (err) {
+      window._toast.show('Could not post listing: ' + (err.message || 'Please try again.'), 'error');
+    } finally {
+      btn.textContent = 'Publish Listing →';
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sign In — Waste2Wealth Hub</title>
+  <meta name="description" content="Sign in to your Waste2Wealth Hub account and start trading waste globally."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/auth.css"/>
+</head>
+<body>
+<div class="auth-root">
+
+  <!-- ══ Left Visual Panel ═════════════════════════════════ -->
+  <div class="auth-visual">
+    <div class="eco-symbols" aria-hidden="true">
+      <span class="eco-sym" style="font-size:5rem;top:8%;left:6%;--dur:6s;--del:0s;">♻️</span>
+      <span class="eco-sym" style="font-size:3rem;top:20%;right:10%;--dur:7s;--del:1s;">🌍</span>
+      <span class="eco-sym" style="font-size:4rem;top:44%;left:4%;--dur:5s;--del:2s;">🏭</span>
+      <span class="eco-sym" style="font-size:2.5rem;top:62%;right:6%;--dur:8s;--del:.5s;">💻</span>
+      <span class="eco-sym" style="font-size:3.5rem;bottom:16%;left:14%;--dur:6s;--del:1.5s;">🌾</span>
+      <span class="eco-sym" style="font-size:2rem;top:35%;left:50%;--dur:9s;--del:2.5s;">⚙</span>
+      <span class="eco-sym" style="font-size:2.8rem;top:78%;right:28%;--dur:7s;--del:1.2s;">📦</span>
+    </div>
+
+    <div class="auth-visual-brand">
+      <a href="index.html">
+        <div class="auth-visual-logo">♻️</div>
+        <div>
+          <div class="auth-visual-name">Waste2Wealth Hub<small>Global Waste Marketplace</small></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="auth-visual-content">
+      <div class="auth-visual-badge">🌍 Trusted by 24,000+ Traders Worldwide</div>
+      <h1 class="auth-visual-title">
+        Welcome<br/>
+        Back,<br/>
+        <span>Trader</span>
+      </h1>
+      <p class="auth-visual-desc">Sign in to access your listings, track active trades, manage payments, and connect with verified buyers and sellers across Nigeria, Africa and the world.</p>
+
+      <div class="auth-stats-grid">
+        <div class="auth-stat-box">
+          <div class="auth-stat-box-num" style="color:var(--gold-light);">54K+</div>
+          <div class="auth-stat-box-label">Active Listings</div>
+        </div>
+        <div class="auth-stat-box">
+          <div class="auth-stat-box-num" style="color:#6ee7b7;">78+</div>
+          <div class="auth-stat-box-label">Countries</div>
+        </div>
+        <div class="auth-stat-box">
+          <div class="auth-stat-box-num" style="color:#fff;">36</div>
+          <div class="auth-stat-box-label">Nigerian States</div>
+        </div>
+        <div class="auth-stat-box">
+          <div class="auth-stat-box-num" style="color:var(--gold-light);">$12M+</div>
+          <div class="auth-stat-box-label">Trades Processed</div>
+        </div>
+      </div>
+
+      <div class="auth-features" style="margin-top:28px;">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔒</div>
+          <div class="auth-feature-text">
+            <strong>Escrow-Protected Trades</strong>
+            <span>Your funds secured until delivery confirmed</span>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">💱</div>
+          <div class="auth-feature-text">
+            <strong>Multi-Currency Payments</strong>
+            <span>NGN, USD, GBP, EUR, GHS, KES &amp; more</span>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <div class="auth-feature-text">
+            <strong>Live Market Intelligence</strong>
+            <span>Real-time waste commodity prices &amp; trends</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-bottom-strip">
+      <span style="font-size:1.2rem;">🌱</span>
+      <span>Circular Economy Platform · NDPR Compliant · SSL Secured</span>
+    </div>
+  </div>
+
+  <!-- ══ Right Form Panel ═══════════════════════════════════ -->
+  <div class="auth-form-panel">
+    <div class="auth-form-box">
+      <div class="auth-form-header">
+        <span class="badge badge-green mb-12">♻️ Waste2Wealth Hub</span>
+        <h2>Sign In to Your Account</h2>
+        <p>Enter your credentials to access your trading dashboard.</p>
+      </div>
+
+      <!-- Alert -->
+      <div id="loginAlert" class="alert alert-danger" style="display:none;"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label">Email Address <span class="req">*</span></label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input type="email" name="email" class="form-control"
+              placeholder="trader@example.com"
+              data-validate="required|email" data-label="Email"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Password <span class="req">*</span></span>
+            <a href="#" id="forgotBtn" style="font-size:.82rem;color:var(--green);font-weight:700;">Forgot password?</a>
+          </label>
+          <div class="input-wrap" style="position:relative;">
+            <span class="input-icon">🔒</span>
+            <input type="password" name="password" id="password" class="form-control"
+              placeholder="Your password"
+              data-validate="required" data-label="Password"/>
+            <button type="button" data-toggle-pw="password"
+              style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;">👁</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="check-label">
+            <input type="checkbox" name="rememberMe" id="rememberMe"/>
+            <span>Keep me signed in on this device</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full btn-lg" id="loginBtn">
+          Sign In to Dashboard →
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>or continue with</span></div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <button class="btn btn-outline btn-sm" onclick="window._toast.show('Google sign-in coming soon.','info')">
+          🔵 Google
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="window._toast.show('LinkedIn sign-in coming soon.','info')">
+          💼 LinkedIn
+        </button>
+      </div>
+
+      <div class="alert alert-info mt-24" style="font-size:.84rem;">
+        🌍 Trading internationally? Make sure to verify your account for cross-border listings access.
+      </div>
+
+      <div class="auth-footer">
+        New to Waste2Wealth Hub? <a href="signup.html">Create a free account →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /auth-root -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Redirect if already logged in
+  SupabaseAuth.getSession().then(session => {
+    if (session) window.location.href = 'dashboard.html';
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form  = e.target;
+    const alert = document.getElementById('loginAlert');
+    alert.style.display = 'none';
+
+    const result = FormValidator.validate(form);
+    if (!result.isValid) { FormValidator.showErrors(form, result.errors); return; }
+
+    const fd  = new FormData(form);
+    const btn = document.getElementById('loginBtn');
+    btn.textContent = 'Signing in…';
+    btn.classList.add('btn-loading');
+    btn.disabled = true;
+
+    try {
+      await SupabaseAuth.signIn({
+        email:    fd.get('email'),
+        password: fd.get('password'),
+      });
+      window._toast.show('Welcome back! Redirecting to your dashboard…', 'success');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    } catch (err) {
+      alert.textContent = '⚠ ' + (err.message || 'Sign-in failed. Check your credentials and try again.');
+      alert.style.display = 'flex';
+      btn.textContent = 'Sign In to Dashboard →';
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('forgotBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const emailEl = document.querySelector('[name="email"]');
+    const email = emailEl.value.trim();
+    if (!email || !FormValidator.validateEmail(email)) {
+      window._toast.show('Please enter your email address first.', 'warning');
+      emailEl.focus();
+      return;
+    }
+    try {
+      await SupabaseAuth.resetPassword(email);
+      window._toast.show('Password reset email sent! Check your inbox.', 'success');
+    } catch (err) {
+      window._toast.show('Could not send reset email: ' + err.message, 'error');
+    }
+  });
+});
+</script>
+</body>
+</html>

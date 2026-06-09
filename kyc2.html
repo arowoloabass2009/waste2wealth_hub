@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Account Verification · Step 2 — Waste2Wealth Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/kyc.css"/>
+</head>
+<body class="kyc-root">
+
+<!-- ══ Navbar ══════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">♻️</div>
+      <span class="navbar-name">Waste2Wealth <span>Hub</span><small>Verification · Step 2</small></span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="kyc1.html" class="btn btn-outline btn-sm">← Step 1</a>
+      <button class="btn btn-dark btn-sm" onclick="SupabaseAuth.signOut()">Sign Out</button>
+    </div>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ══ Page Header ═════════════════════════════════════════ -->
+<div class="page-header">
+  <div class="container">
+    <span class="badge badge-gold mb-16">✅ Step 2 of 2 — Business Documents &amp; Final Review</span>
+    <h1 class="display-2">Almost There!</h1>
+    <p class="lead">Upload your business registration and environmental permits, then review and activate your verified trader account.</p>
+  </div>
+</div>
+
+<!-- ══ KYC Layout ══════════════════════════════════════════ -->
+<div class="kyc-layout container">
+
+  <!-- Sidebar -->
+  <aside class="kyc-sidebar">
+    <div class="kyc-progress-card">
+      <h3>Verification Progress</h3>
+      <div class="kyc-overall-row">
+        <div class="progress-track" style="flex:1;">
+          <div class="progress-fill" id="kycProgress" style="width:60%;"></div>
+        </div>
+        <span class="kyc-overall-pct" id="kycPct">60%</span>
+      </div>
+      <div class="kyc-steps-list">
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot done" id="kdot-1">✓</div>
+          <div><div class="kyc-step-title">Personal Details</div><div class="kyc-step-sub">✓ Complete</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot done" id="kdot-2">✓</div>
+          <div><div class="kyc-step-title">Trade Profile</div><div class="kyc-step-sub">✓ Complete</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot done" id="kdot-3">✓</div>
+          <div><div class="kyc-step-title">Identity Document</div><div class="kyc-step-sub">✓ Complete</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot active" id="kdot-4">4</div>
+          <div><div class="kyc-step-title">Business Documents</div><div class="kyc-step-sub">CAC, Permits, Bank</div></div>
+        </div>
+        <div class="kyc-step-item">
+          <div class="kyc-step-dot pending" id="kdot-5">5</div>
+          <div><div class="kyc-step-title">Review &amp; Activate</div><div class="kyc-step-sub">Final submission</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kyc-info-card">
+      <h4>🌍 Unlock All Features</h4>
+      <p>Completing Step 2 activates your full trader profile — international listings, escrow, logistics dashboard, market analytics and sustainability certification.</p>
+      <div class="kyc-security-badges">
+        <span>✅ Verified Badge</span>
+        <span>🌐 Global Access</span>
+        <span>💳 Escrow Pay</span>
+        <span>📊 Analytics</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="kyc-main">
+
+    <!-- ── Section 4: Business Documents ─────────────────── -->
+    <div class="kyc-section active" id="kyc-section-4">
+      <div class="kyc-section-header">
+        <div class="kyc-section-num">04</div>
+        <div>
+          <h2>Business Documents</h2>
+          <p>Upload your company registration, waste trading licence, and banking details. Required for corporate accounts and international trades. Individual traders may skip optional fields.</p>
+        </div>
+      </div>
+      <div class="kyc-form-card">
+        <form id="kycForm4">
+
+          <!-- Business Registration -->
+          <div style="margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border-light);">
+            <h4 style="font-size:.95rem;font-weight:800;color:var(--green-dark);margin-bottom:16px;">📋 Company Registration</h4>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Business Registration No. (CAC / Equivalent)</label>
+                <input type="text" name="rcNumber" class="form-control"
+                  placeholder="e.g. RC 1234567 · BN 12345"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Year Incorporated</label>
+                <input type="number" name="yearInc" class="form-control" placeholder="e.g. 2018" min="1900" max="2026"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload CAC Certificate / Registration Document</label>
+              <div class="upload-zone" id="zone-cac" onclick="document.getElementById('cacFile').click()">
+                <div class="upload-icon">🏢</div>
+                <p><strong>Click to upload</strong> — CAC Certificate or equivalent</p>
+                <small>JPG, PNG, PDF — Max 5MB</small>
+                <div id="prev-cac" class="upload-file-name" style="display:none;"></div>
+              </div>
+              <input type="file" id="cacFile" accept=".jpg,.jpeg,.png,.pdf" style="display:none;"
+                onchange="handleUpload(this,'zone-cac','prev-cac','cac-docs','_cacUrl')"/>
+            </div>
+          </div>
+
+          <!-- Waste Trading Licence -->
+          <div style="margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border-light);">
+            <h4 style="font-size:.95rem;font-weight:800;color:var(--green-dark);margin-bottom:16px;">♻️ Waste Handling Permit / Licence</h4>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Permit Number (if applicable)</label>
+                <input type="text" name="permitNumber" class="form-control"
+                  placeholder="e.g. NESREA/2024/001"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Issuing Authority</label>
+                <select name="permitAuthority" class="form-control form-select">
+                  <option value="">Select…</option>
+                  <option>NESREA (Nigeria)</option>
+                  <option>EPA (Ghana)</option>
+                  <option>NEMA (Kenya)</option>
+                  <option>DEA (South Africa)</option>
+                  <option>EPA (USA)</option>
+                  <option>Environment Agency (UK)</option>
+                  <option>State Environmental Agency</option>
+                  <option>Other</option>
+                  <option>Not Applicable</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Upload Permit / Licence Document</label>
+              <div class="upload-zone" id="zone-permit" onclick="document.getElementById('permitFile').click()">
+                <div class="upload-icon">📜</div>
+                <p><strong>Click to upload</strong> — Permit or Licence</p>
+                <small>JPG, PNG, PDF — Max 5MB · Optional for individual traders</small>
+                <div id="prev-permit" class="upload-file-name" style="display:none;"></div>
+              </div>
+              <input type="file" id="permitFile" accept=".jpg,.jpeg,.png,.pdf" style="display:none;"
+                onchange="handleUpload(this,'zone-permit','prev-permit','permits','_permitUrl')"/>
+            </div>
+          </div>
+
+          <!-- Banking Details -->
+          <div>
+            <h4 style="font-size:.95rem;font-weight:800;color:var(--green-dark);margin-bottom:16px;">🏦 Payment Receiving Account</h4>
+            <div class="alert alert-info" style="margin-bottom:20px;">
+              💡 Your payment details are encrypted and used only for disbursing trade proceeds to your account. Never shared with buyers.
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Bank Name <span class="req">*</span></label>
+                <select name="bankName" class="form-control form-select"
+                  data-validate="required" data-label="Bank Name">
+                  <option value="">Select bank…</option>
+                  <optgroup label="Nigerian Banks">
+                    <option>Access Bank</option><option>Zenith Bank</option>
+                    <option>GTBank</option><option>First Bank</option>
+                    <option>UBA</option><option>FCMB</option>
+                    <option>Fidelity Bank</option><option>Sterling Bank</option>
+                    <option>Wema Bank</option><option>Opay</option>
+                    <option>Kuda Bank</option><option>Moniepoint</option>
+                    <option>PalmPay</option>
+                  </optgroup>
+                  <optgroup label="African Banks">
+                    <option>GCB Bank (Ghana)</option><option>Equity Bank (Kenya)</option>
+                    <option>Standard Bank (SA)</option><option>Ecobank</option>
+                  </optgroup>
+                  <optgroup label="International">
+                    <option>Barclays</option><option>HSBC</option>
+                    <option>Deutsche Bank</option><option>Citibank</option>
+                    <option>PayPal / Wise</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Account Name <span class="req">*</span></label>
+                <input type="text" name="accountName" class="form-control"
+                  placeholder="Exact name on bank account"
+                  data-validate="required" data-label="Account Name"/>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label">Account Number <span class="req">*</span></label>
+                <input type="text" name="accountNumber" class="form-control"
+                  placeholder="10-digit account number"
+                  data-validate="required" data-label="Account Number"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Currency</label>
+                <select name="bankCurrency" class="form-control form-select">
+                  <option value="NGN">NGN — Nigerian Naira</option>
+                  <option value="USD">USD — US Dollar</option>
+                  <option value="GBP">GBP — British Pound</option>
+                  <option value="EUR">EUR — Euro</option>
+                  <option value="GHS">GHS — Ghanaian Cedi</option>
+                  <option value="KES">KES — Kenyan Shilling</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="kyc-nav">
+            <button type="button" class="btn btn-outline" onclick="prevSection2(4)">← Back to Step 1</button>
+            <button type="button" class="btn btn-primary" onclick="nextSection2(4)">Save &amp; Review →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── Section 5: Review & Activate ─────────────────── -->
+    <div class="kyc-section" id="kyc-section-5">
+      <div class="kyc-section-header">
+        <div class="kyc-section-num">05</div>
+        <div>
+          <h2>Review &amp; Activate</h2>
+          <p>Your verification is nearly complete. Review your information and submit for compliance review. You will receive a ✅ verified badge within 24–48 hours.</p>
+        </div>
+      </div>
+      <div class="kyc-form-card">
+
+        <!-- Review Summary -->
+        <div style="display:flex;flex-direction:column;gap:20px;margin-bottom:32px;">
+          <div class="review-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--cream-alt);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:1.3rem;">👤</span>
+              <div><div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Personal Details</div><div style="font-size:.8rem;color:var(--text-muted);">Name, nationality, address, phone</div></div>
+            </div>
+            <span class="badge badge-success">✓ Complete</span>
+          </div>
+          <div class="review-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--cream-alt);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:1.3rem;">🔄</span>
+              <div><div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Trade Profile</div><div style="font-size:.8rem;color:var(--text-muted);">Role, zone, categories, volume</div></div>
+            </div>
+            <span class="badge badge-success">✓ Complete</span>
+          </div>
+          <div class="review-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--cream-alt);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:1.3rem;">🪪</span>
+              <div><div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Identity Document</div><div style="font-size:.8rem;color:var(--text-muted);">Government-issued ID uploaded</div></div>
+            </div>
+            <span class="badge badge-success">✓ Uploaded</span>
+          </div>
+          <div class="review-row" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--cream-alt);border-radius:var(--radius-sm);border:1px solid var(--border);">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-size:1.3rem;">🏦</span>
+              <div><div style="font-size:.88rem;font-weight:700;color:var(--green-dark);">Payment Account</div><div style="font-size:.8rem;color:var(--text-muted);">Bank details for trade proceeds</div></div>
+            </div>
+            <span class="badge badge-success">✓ Complete</span>
+          </div>
+        </div>
+
+        <!-- Review Notices -->
+        <div class="alert alert-gold">
+          ⏳ <strong>Review Timeline:</strong> Your KYC submission will be reviewed within <strong>24–48 business hours</strong>. You will receive an email confirmation and in-app notification once verified.
+        </div>
+        <div class="alert alert-info">
+          🌍 <strong>International Trading:</strong> Once verified, your account will be upgraded to the market zones you selected. Cross-border trades are subject to applicable customs and export regulations.
+        </div>
+
+        <!-- Final Consent -->
+        <div style="display:flex;flex-direction:column;gap:14px;margin:24px 0;">
+          <label class="check-label" id="consentCheck1">
+            <input type="checkbox" id="consent1"/>
+            <span>I confirm that all information and documents submitted are accurate, genuine and my own. I understand that providing false information is a violation of platform terms and may result in account suspension.</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="consent2"/>
+            <span>I consent to Waste2Wealth Hub verifying my identity and business details with relevant authorities as required by applicable regulations (NDPR, GDPR, FATF guidelines).</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" id="consent3"/>
+            <span>I agree to comply with the Basel Convention on Hazardous Wastes and all applicable local and international waste trading regulations in my jurisdiction.</span>
+          </label>
+        </div>
+
+        <div class="kyc-nav">
+          <button type="button" class="btn btn-outline" onclick="prevSection2(5)">← Back</button>
+          <button type="button" class="btn btn-primary btn-lg" id="submitKYCBtn" onclick="submitKYC()">
+            Submit for Verification ✅
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Success State ──────────────────────────────────── -->
+    <div class="kyc-section" id="kyc-section-success">
+      <div class="kyc-form-card text-center" style="padding:60px 36px;">
+        <div style="font-size:4rem;margin-bottom:24px;">🎉</div>
+        <h2 style="color:var(--green-dark);margin-bottom:12px;">Verification Submitted!</h2>
+        <p style="color:var(--text-soft);max-width:480px;margin:0 auto 32px;line-height:1.8;">
+          Your KYC application has been received. Our compliance team will review your documents within <strong>24–48 business hours</strong>. You will receive an email notification when your ✅ verified badge is activated.
+        </p>
+        <div class="grid-2" style="gap:20px;max-width:480px;margin:0 auto 32px;">
+          <div style="background:var(--cream-alt);border-radius:var(--radius-sm);padding:20px;text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:8px;">📧</div>
+            <div style="font-size:.82rem;font-weight:700;color:var(--green-dark);">Check Your Email</div>
+            <div style="font-size:.76rem;color:var(--text-muted);margin-top:4px;">Confirmation sent to your registered email</div>
+          </div>
+          <div style="background:var(--cream-alt);border-radius:var(--radius-sm);padding:20px;text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:8px;">⏳</div>
+            <div style="font-size:.82rem;font-weight:700;color:var(--green-dark);">24–48 Hour Review</div>
+            <div style="font-size:.76rem;color:var(--text-muted);margin-top:4px;">Our team reviews every submission manually</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="dashboard.html" class="btn btn-primary btn-lg">Go to Dashboard →</a>
+          <a href="index.html" class="btn btn-outline btn-lg">Explore Listings</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div><!-- /kyc-layout -->
+
+<footer class="footer" style="margin-top:80px;">
+  <div class="container">
+    <div class="footer-bottom">
+      <span>© 2026 Waste2Wealth Hub Ltd. All rights reserved.</span>
+      <span>🔒 All KYC data encrypted · NDPR &amp; GDPR Compliant · Basel Convention Ready</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+let currentSec2 = 4;
+const kycData2  = {};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await SupabaseAuth.requireAuth('login.html');
+  updateProgress2();
+
+  document.querySelectorAll('.upload-zone').forEach(zone => {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); window._toast.show('Please click the zone to upload.', 'info'); });
+  });
+});
+
+function updateProgress2() {
+  const pct = Math.round(((currentSec2 - 1) / 5) * 100);
+  document.getElementById('kycProgress').style.width = pct + '%';
+  document.getElementById('kycPct').textContent = pct + '%';
+  const dot4 = document.getElementById('kdot-4');
+  const dot5 = document.getElementById('kdot-5');
+  if (dot4) { dot4.className = currentSec2 > 4 ? 'kyc-step-dot done' : 'kyc-step-dot active'; dot4.textContent = currentSec2 > 4 ? '✓' : '4'; }
+  if (dot5) { dot5.className = currentSec2 >= 5 ? 'kyc-step-dot active' : 'kyc-step-dot pending'; dot5.textContent = '5'; }
+}
+
+function nextSection2(current) {
+  const form = document.getElementById(`kycForm${current}`);
+  if (form) {
+    const result = FormValidator.validate(form);
+    if (!result.isValid) { FormValidator.showErrors(form, result.errors); return; }
+    new FormData(form).forEach((v, k) => kycData2[k] = v);
+  }
+  document.getElementById(`kyc-section-${current}`).classList.remove('active');
+  document.getElementById(`kyc-section-${current + 1}`).classList.add('active');
+  currentSec2 = current + 1;
+  updateProgress2();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevSection2(current) {
+  if (current === 4) {
+    window.location.href = 'kyc1.html';
+    return;
+  }
+  document.getElementById(`kyc-section-${current}`).classList.remove('active');
+  document.getElementById(`kyc-section-${current - 1}`).classList.add('active');
+  currentSec2 = current - 1;
+  updateProgress2();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function submitKYC() {
+  const c1 = document.getElementById('consent1').checked;
+  const c2 = document.getElementById('consent2').checked;
+  const c3 = document.getElementById('consent3').checked;
+  if (!c1 || !c2 || !c3) {
+    window._toast.show('Please check all consent boxes to complete your verification.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('submitKYCBtn');
+  btn.textContent = 'Submitting…';
+  btn.classList.add('btn-loading');
+  btn.disabled = true;
+
+  try {
+    await KYCService.save({
+      ...buildPayload2(),
+      status: 'under_review',
+      submitted_at: new Date().toISOString(),
+    });
+    window._toast.show('Verification submitted successfully!', 'success');
+    document.getElementById('kyc-section-5').classList.remove('active');
+    document.getElementById('kyc-section-success').classList.add('active');
+    document.getElementById('kycProgress').style.width = '100%';
+    document.getElementById('kycPct').textContent = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (e) {
+    window._toast.show('Submission error: ' + (e.message || 'Please try again.'), 'error');
+    btn.textContent = 'Submit for Verification ✅';
+    btn.classList.remove('btn-loading');
+    btn.disabled = false;
+  }
+}
+
+function buildPayload2() {
+  return {
+    rc_number:       kycData2.rcNumber      || null,
+    year_inc:        kycData2.yearInc       || null,
+    cac_doc_url:     kycData2._cacUrl       || null,
+    permit_number:   kycData2.permitNumber  || null,
+    permit_authority:kycData2.permitAuthority|| null,
+    permit_url:      kycData2._permitUrl    || null,
+    bank_name:       kycData2.bankName      || null,
+    account_name:    kycData2.accountName   || null,
+    account_number:  kycData2.accountNumber || null,
+    bank_currency:   kycData2.bankCurrency  || 'NGN',
+  };
+}
+
+async function handleUpload(input, zoneId, prevId, folder, urlKey) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { window._toast.show('File too large. Max 5MB.', 'error'); return; }
+  const zone = document.getElementById(zoneId);
+  const prev = document.getElementById(prevId);
+  zone.classList.add('uploaded'); prev.style.display = 'flex';
+  prev.innerHTML = `⏳ Uploading ${file.name}…`;
+  try {
+    const url = await KYCService.uploadFile(file, folder);
+    kycData2[urlKey] = url;
+    prev.innerHTML = `✓ ${file.name}`;
+    window._toast.show(`${file.name} uploaded.`, 'success');
+  } catch (err) {
+    kycData2[urlKey] = null;
+    prev.innerHTML = `✓ ${file.name} (noted)`;
+    window._toast.show(`${file.name} noted. Configure storage to enable cloud upload.`, 'info');
+  }
+}
+</script>
+</body>
+</html>
