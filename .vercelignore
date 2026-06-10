@@ -1,0 +1,9 @@
+node_modules/
+bs-config.json
+start-dev.bat
+start-dev.ps1
+js/app.js.map
+migrations/
+.git/
+*.env
+.env.local

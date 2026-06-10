@@ -59,7 +59,7 @@ const SupabaseAuth = {
   async signOut() {
     const sb = getSupabase();
     if (sb) await sb.auth.signOut();
-    window.location.href = 'index.html';
+    window.location.href = '/';
   },
 
   async getSession() {
@@ -71,7 +71,14 @@ const SupabaseAuth = {
 
   async requireAuth(redirectTo = 'login.html') {
     const session = await this.getSession();
-    if (!session) { window.location.href = redirectTo; return null; }
+    if (!session) {
+      // Support both .html and cleanUrl routing
+      const dest = window.location.pathname.endsWith('.html')
+        ? redirectTo
+        : redirectTo.replace('.html', '');
+      window.location.href = dest;
+      return null;
+    }
     return session;
   },
 
@@ -92,8 +99,11 @@ const SupabaseAuth = {
   async resetPassword(email) {
     const sb = getSupabase();
     if (!sb) throw new Error('Supabase not configured.');
+    // Use '/login' so it works with both cleanUrls (Vercel) and direct .html access
+    const redirectBase = window.location.origin;
+    const redirectPath = window.location.pathname.endsWith('.html') ? '/login.html' : '/login';
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/login.html'
+      redirectTo: redirectBase + redirectPath
     });
     if (error) throw error;
   }

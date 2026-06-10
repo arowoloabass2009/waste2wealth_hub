@@ -1,7 +1,10 @@
 {
   "name": "waste2wealth_hub",
   "version": "1.0.0",
-  "description": "Waste2Wealth Hub — Global Waste Trading Marketplace (Local, African & International)",
+  "description": "Waste2Wealth Hub - Global Waste Trading Marketplace (Local, African & International)",
+  "engines": {
+    "node": ">=18.x"
+  },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail --names \"TS,BS\" --prefix-colors \"green,cyan\" \"tsc --watch --preserveWatchOutput\" \"browser-sync start --config bs-config.json\"",
     "build": "tsc",
