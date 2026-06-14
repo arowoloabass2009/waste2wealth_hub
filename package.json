@@ -7,14 +7,16 @@
   },
   "scripts": {
     "dev": "concurrently --kill-others-on-fail --names \"TS,BS\" --prefix-colors \"green,cyan\" \"tsc --watch --preserveWatchOutput\" \"browser-sync start --config bs-config.json\"",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "browser-sync start --config bs-config.json",
     "watch": "tsc --watch --preserveWatchOutput",
     "serve": "browser-sync start --config bs-config.json"
   },
+  "dependencies": {
+    "typescript": "5.4.5"
+  },
   "devDependencies": {
     "browser-sync": "^3.0.2",
-    "concurrently": "^8.2.2",
-    "typescript": "^5.4.5"
+    "concurrently": "^8.2.2"
   }
 }
